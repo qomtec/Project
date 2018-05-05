@@ -1,0 +1,55 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Sign Up</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <h1 text-center>
+    <ion-icon class="auth-icon" name="person-add" color="primary"></ion-icon>
+  </h1>
+
+  <form [formGroup]="signupForm" >
+
+    <ion-item>
+      <ion-icon name="mail" item-start color="primary"></ion-icon>
+      <ion-input type="text" placeholder="Email Clínica" formControlName="clinica"></ion-input>
+    </ion-item>
+    <ion-item>
+      <button ion-button full (click)="buscar()">Buscar clínica</button>  
+    </ion-item>
+    <ion-item>
+      <ion-icon name="person" item-start color="primary"></ion-icon>
+      <ion-input type="text" placeholder="Nombre" formControlName="name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="at" item-start color="primary"></ion-icon>
+      <ion-input type="email" placeholder="Email" formControlName="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="lock" item-start color="primary"></ion-icon>
+      <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
+    </ion-item>
+
+    <ion-list>
+      <ion-item>
+        <ion-label>Soy</ion-label>
+        <ion-select interface="action-sheet" formControlName="tipo">
+          <ion-option value="p">Paciente</ion-option>
+          <ion-option value="d">Dentista</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <br>
+    <button ion-button full (click)="onSubmit()" [disabled]="signupForm.invalid">Create Account</button>
+
+  </form>
+
+</ion-content>

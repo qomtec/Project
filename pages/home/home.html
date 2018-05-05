@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{nombre_usuario}}
+    </ion-title>
+
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="view">
+      <ion-segment-button value="citas">
+        Citas
+      </ion-segment-button>
+      <ion-segment-button value="usuario">
+        Usuario
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <div [ngSwitch]="view">
+    <ion-list *ngSwitchCase="'citas'" no-lines>
+      <button ion-item *ngFor="let chat of chats | async" (click)="onChatOpen(chat)">
+        <ion-avatar item-start>
+          <img [src]="chat.photo || 'assets/images/no-photo.jpg'">
+        </ion-avatar>
+        <h2>{{ chat.title }}</h2>
+        <p *ngIf="chat.lastMessage; else customMessage">{{ chat.timestamp | date:'dd/MM/y H:mm' }} - {{ chat.lastMessage }}</p>
+        <ng-template #customMessage>
+          <p>No messages</p>
+        </ng-template>
+      </button>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'usuario'" no-lines>
+      <button ion-button block (click)="logout()">Cerrar sesión</button>
+    </ion-list>
+
+  </div>
+  Está aplicación te permite saber y conocer las visitas que tienes en la clinica:
+  <b>{{ nombre_clinica }} </b>
+  <p>
+    Puedes consultar tus citas programadas en la seccion de citas
+  </p>
+  <p>
+    Ademas de gestionar los datos correspondientes a tu usuario
+  </p>
+</ion-content>
