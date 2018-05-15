@@ -6,10 +6,12 @@ import { map } from 'rxjs/operators/map';
 
 import { AngularFireAuth } from "angularfire2/auth";
 import { AngularFireDatabase, AngularFireObject, AngularFireList } from "angularfire2/database";
+
 import * as firebase from 'firebase/app';
 import 'firebase/storage';
 
 import { User } from '../../models/user.model';
+import { Query } from '@firebase/database';
 
 
 
@@ -43,6 +45,7 @@ export class UserServiceProvider {
       )
     )
       .map((users: User[]) => {
+
         return users.filter((user: User) => user.$key !== uidToExclude);
       });
   }
@@ -59,7 +62,7 @@ export class UserServiceProvider {
   }
 
   create(user: User, uuid: string, codigo: string): Promise<void> {
-    
+
     return this.db.object("/users/" + uuid)
       .set(user)
       .catch();
@@ -71,9 +74,24 @@ export class UserServiceProvider {
       .catch();
   }
 
- 
+
   getClinica(email: string): Promise<any> {
     let ref = firebase.database().ref("/clinica/" + User.GenerateKey(email));
     return ref.once("value");
   }
+  itemsRef: AngularFireList<User>;
+  items: Observable<User[]>;
+  public getUsers(clinica: string): Promise<any> {
+    let ref = firebase.database().ref();
+    //let userRef = ref.child("users").orderByChild("codigo_clinica").equalTo(clinica).once('value');
+    this.itemsRef = this.db.list('/users', ref => ref.orderByChild('codigo_clinica').equalTo(clinica));
+    this.items = this.itemsRef.valueChanges();
+    this.items.subscribe( i =>{
+      console.log(i);
+    });
+    
+
+    return ref.once('value');
+  }
+  
 }

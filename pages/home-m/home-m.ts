@@ -18,6 +18,7 @@ export class HomeMPage {
   nombre_usuario: string = "";
   nombre_clinica: string = "";
   codigo_clinica: string = "";
+  myDate = new Date();
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams, 
@@ -34,11 +35,18 @@ export class HomeMPage {
         this.clinicaService.getClinica(user.codigo_clinica)
         .then((cl: Clinica) => {
           this.nombre_clinica = cl.nombre;
-
+          this.userService.getUsers(this.codigo_clinica).then(user => {
+      
+          });
         }).catch ((error)=> {
           console.log(error);
         });
       });
+    
+      
+  }
+  dateChange(myDate){
+    console.log(this.myDate.toString());
   }
   salir(){
     this.authService.logout();

@@ -10,6 +10,9 @@
       <ion-segment-button value="citas">
         Citas
       </ion-segment-button>
+      <ion-segment-button value="clientes">
+        Pacientes
+      </ion-segment-button>
       <ion-segment-button value="usuario">
         Usuario
       </ion-segment-button>
@@ -19,22 +22,18 @@
 <ion-content padding>
   <div [ngSwitch]="view">
     <ion-list *ngSwitchCase="'citas'" no-lines>
-      <button ion-item *ngFor="let chat of chats | async" (click)="onChatOpen(chat)">
-        <ion-avatar item-start>
-          <img [src]="chat.photo || 'assets/images/no-photo.jpg'">
-        </ion-avatar>
-        <h2>{{ chat.title }}</h2>
-        <p *ngIf="chat.lastMessage; else customMessage">{{ chat.timestamp | date:'dd/MM/y H:mm' }} - {{ chat.lastMessage }}</p>
-        <ng-template #customMessage>
-          <p>No messages</p>
-        </ng-template>
-      </button>
+      <p>Citas programadas</p>
+      <ion-item>
+        <ion-label floating>Fecha</ion-label>
+        <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="myDate" (ionChange)="dateChange(myDate)"></ion-datetime>
+      </ion-item>
     </ion-list>
-
+    <ion-list *ngSwitchCase="'clientes'" no-lines>
+      <p>Pacientes</p>
+    </ion-list>
     <ion-list *ngSwitchCase="'usuario'" no-lines>
       <button ion-button block (click)="salir()">Cerrar sesión</button>
     </ion-list>
-
   </div>
   Está aplicación te permite saber y conocer las visitas que tienes en la clinica:
   <b>{{ nombre_clinica }} </b>
