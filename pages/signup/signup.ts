@@ -64,7 +64,7 @@ export class SignupPage {
     if (this.codigo_clinica != "") {
       let loading: Loading = this.showLoading();
       let formUser = this.signupForm.value;
-      let username: string = formUser.username;
+      //let username: string = formUser.username;
       formUser.codigo_clinica = this.codigo_clinica;
       console.log(formUser.name + " -- " + formUser.clinica + " -- " + formUser.email + " -- " + formUser.tipo);
       this.authService.createAuthUser({

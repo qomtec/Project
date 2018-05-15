@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-//import { Http } from '@angular/http';
-
 import { Observable } from 'rxjs';
-//import { map } from 'rxjs/operators/map';
 
 import { AngularFireAuth } from "angularfire2/auth";
 import { AngularFireDatabase, AngularFireObject, AngularFireList } from "angularfire2/database";
@@ -11,10 +8,6 @@ import * as firebase from 'firebase/app';
 import 'firebase/storage';
 
 import { User } from '../../models/user.model';
-//import { Query } from '@firebase/database';
-//import { ArrayObservable } from 'rxjs/observable/ArrayObservable';
-
-
 
 @Injectable()
 export class UserServiceProvider {

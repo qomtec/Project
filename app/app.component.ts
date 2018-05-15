@@ -73,11 +73,11 @@ export class MyApp {
       splashScreen.hide();
     });
   }
-  private showAlert(message: string): void {
+  /*private showAlert(message: string): void {
     this.alertCtrl.create({
       message: message,
       buttons: ['Ok']
     }).present();
-  }
+  }*/
 }
 

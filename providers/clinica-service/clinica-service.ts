@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators/map';
+//import { map } from 'rxjs/operators/map';
 
 import { AngularFireAuth } from "angularfire2/auth";
 import { AngularFireDatabase, AngularFireObject, AngularFireList } from "angularfire2/database";
-import * as firebase from 'firebase/app';
+//import * as firebase from 'firebase/app';
 import 'firebase/storage';
 
 import { Clinica } from "../../models/clinica.model";
@@ -44,8 +44,8 @@ export class ClinicaServiceProvider {
     this.currentClinica = this.db.object(`/clinica/${clinicaId}`);
     //this.setClinicas(authUser.uid);
   }
-  private setClinicas(uidToExclude: string): void {
-  }
+  /*private setClinicas(uidToExclude: string): void {
+  }*/
   clinica: Observable<Clinica[]>;
   currentClinica: AngularFireObject<Clinica>;
   idClinica: string = "";

@@ -19,27 +19,33 @@
     </ion-segment>
   </ion-toolbar>
 </ion-header>
+
+
 <ion-content padding>
   <div [ngSwitch]="view">
     <ion-list *ngSwitchCase="'citas'" no-lines>
       <p>Citas programadas</p>
       <ion-item>
         <ion-label floating>Fecha</ion-label>
-        <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="myDate" (ionChange)="dateChange(myDate)"></ion-datetime>
+        <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="myDate" (ionChange)="dateChange(myDate)" ></ion-datetime>
+        <ion-item-sliding *ngFor="let item of listaCitas">
+          <ion-item>
+            <ion-label> </ion-label>
+          </ion-item>
+        </ion-item-sliding>  
       </ion-item>
     </ion-list>
     <ion-list *ngSwitchCase="'clientes'">
       <ion-searchbar (ionInput)="filterItems($event)"></ion-searchbar>
-      <ion-list>
-        <button ion-item *ngFor="let item of listaUsuario" (click)="onUserOpen(item)">
-          <ion-avatar item-start>
-            <img src='../../assets/imgs/no-photo.jpg'>
-          </ion-avatar>
-          <h2>Cliente: {{ item.name}} </h2>
-          <h3>Email: {{ item.email}} </h3>
-        </button>
-
-      </ion-list>
+      <!-- (click)="onUserOpen(item)"-->
+      <ion-item-sliding *ngFor="let item of listaUsuario">
+        <ion-item>
+          <ion-label>{{ item.name }}</ion-label>
+        </ion-item>
+        <ion-item-options>
+          <button ion-button color="secondary" (click)="onUserOpen(item)">Mensaje</button>
+        </ion-item-options>
+      </ion-item-sliding>
     </ion-list>
     <ion-list *ngSwitchCase="'usuario'" no-lines>
       <button ion-button block (click)="salir()">Cerrar sesión</button>
