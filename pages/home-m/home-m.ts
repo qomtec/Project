@@ -18,14 +18,15 @@ export class HomeMPage {
   nombre_usuario: string = "";
   nombre_clinica: string = "";
   codigo_clinica: string = "";
+  listaUsuario: any;
   myDate = new Date();
   constructor(
-    public navCtrl: NavController, 
-    public navParams: NavParams, 
+    public navCtrl: NavController,
+    public navParams: NavParams,
     public authService: AuthServiceProvider,
     public userService: UserServiceProvider,
-    public clinicaService: ClinicaServiceProvider) {
-  }
+    public clinicaService: ClinicaServiceProvider) { }
+
   ionViewDidLoad() {
     this.userService.mapObjectKey<User>(this.userService.currentUser)
       .first()
@@ -33,22 +34,26 @@ export class HomeMPage {
         this.nombre_usuario = user.name;
         this.codigo_clinica = user.codigo_clinica;
         this.clinicaService.getClinica(user.codigo_clinica)
-        .then((cl: Clinica) => {
-          this.nombre_clinica = cl.nombre;
-          this.userService.getUsers(this.codigo_clinica).then(user => {
-      
+          .then((cl: Clinica) => {
+            this.nombre_clinica = cl.nombre;
+            this.userService.getUsers(this.codigo_clinica).then(user => {
+              this.listaUsuario = user;
+            });
+          }).catch((error) => {
+            console.log(error);
           });
-        }).catch ((error)=> {
-          console.log(error);
-        });
       });
-    
-      
   }
-  dateChange(myDate){
+  filterItems(event: any): void{
+    
+  }
+  dateChange(myDate) {
     console.log(this.myDate.toString());
   }
-  salir(){
+  onUserOpen(item){
+    console.log(item)
+  }
+  salir() {
     this.authService.logout();
     this.navCtrl.setRoot(LoginPage)
   }

@@ -28,8 +28,18 @@
         <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="myDate" (ionChange)="dateChange(myDate)"></ion-datetime>
       </ion-item>
     </ion-list>
-    <ion-list *ngSwitchCase="'clientes'" no-lines>
-      <p>Pacientes</p>
+    <ion-list *ngSwitchCase="'clientes'">
+      <ion-searchbar (ionInput)="filterItems($event)"></ion-searchbar>
+      <ion-list>
+        <button ion-item *ngFor="let item of listaUsuario" (click)="onUserOpen(item)">
+          <ion-avatar item-start>
+            <img src='../../assets/imgs/no-photo.jpg'>
+          </ion-avatar>
+          <h2>Cliente: {{ item.name}} </h2>
+          <h3>Email: {{ item.email}} </h3>
+        </button>
+
+      </ion-list>
     </ion-list>
     <ion-list *ngSwitchCase="'usuario'" no-lines>
       <button ion-button block (click)="salir()">Cerrar sesión</button>

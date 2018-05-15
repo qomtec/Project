@@ -49,7 +49,9 @@ export class MyApp {
             
             if (user.tipo == "d") {
               this.rootPage = HomeMPage;
-              console.log("Hola")
+              console.clear();
+              console.log("Hola");
+              
             } else if (user.tipo == "p"){
               this.rootPage = HomePage;
             }

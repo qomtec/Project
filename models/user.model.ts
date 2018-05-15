@@ -4,6 +4,7 @@ export class User {
     public $key: string;
 
     constructor(
+        public codigo: string,
         public name: string,
         public username: string,
         public email: string,
@@ -17,7 +18,6 @@ export class User {
         referencia = referencia.substring(0, 19);
         return referencia;
     }
-
     static currentUser: User;
     
 }

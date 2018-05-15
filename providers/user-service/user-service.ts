@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+//import { Http } from '@angular/http';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators/map';
+//import { map } from 'rxjs/operators/map';
 
 import { AngularFireAuth } from "angularfire2/auth";
 import { AngularFireDatabase, AngularFireObject, AngularFireList } from "angularfire2/database";
@@ -11,7 +11,8 @@ import * as firebase from 'firebase/app';
 import 'firebase/storage';
 
 import { User } from '../../models/user.model';
-import { Query } from '@firebase/database';
+//import { Query } from '@firebase/database';
+//import { ArrayObservable } from 'rxjs/observable/ArrayObservable';
 
 
 
@@ -79,19 +80,38 @@ export class UserServiceProvider {
     let ref = firebase.database().ref("/clinica/" + User.GenerateKey(email));
     return ref.once("value");
   }
-  itemsRef: AngularFireList<User>;
-  items: Observable<User[]>;
-  public getUsers(clinica: string): Promise<any> {
-    let ref = firebase.database().ref();
-    //let userRef = ref.child("users").orderByChild("codigo_clinica").equalTo(clinica).once('value');
-    this.itemsRef = this.db.list('/users', ref => ref.orderByChild('codigo_clinica').equalTo(clinica));
-    this.items = this.itemsRef.valueChanges();
-    this.items.subscribe( i =>{
-      console.log(i);
-    });
-    
 
-    return ref.once('value');
+  public getUsers(clinica: string): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let itemsRef: AngularFireList<User>;
+      let items: Observable<User[]>;
+      //let userRef = ref.child("users").orderByChild("codigo_clinica").equalTo(clinica).once('value');
+      itemsRef = this.db.list('/users', ref => ref.orderByChild('codigo_clinica').equalTo(clinica));
+      items = itemsRef.valueChanges();
+      items.forEach(i => {
+        let obj: any = [];
+        console.log(i);
+        i.forEach(c => {
+          
+          if (c.tipo == 'p') {
+            obj.push({
+              codigo: c.codigo,
+              codigo_clinica: c.codigo_clinica,
+              email: c.email,
+              name: c.name,
+              photo: c.photo,
+              tipo: c.tipo,
+              username: c.username
+            });
+          }
+        });
+        resolve(obj);
+      })
+        .catch((err: any) => {
+          reject(err);
+        });
+    })
+
   }
-  
+
 }
