@@ -49,12 +49,9 @@ export class HomeMPage {
             this.mensajeService.listCitas(this.authService.afAuth.auth.currentUser.uid).then(data =>{
               this.listaCitasUsuario = data;
               console.log(this.listaCitasUsuario);
-              
             });
-            
-            
           }).catch((error) => {
-            console.log(error);
+            //console.log(error);
           });
       });
     
@@ -63,15 +60,17 @@ export class HomeMPage {
     
   }
   dateChange(myDate) {
-    console.log(this.myDate.toString());
+    //console.log(this.myDate.toString());
   }
   onUserOpen(item){
     //console.log(item)
     let mensaje = new Mensaje("","","","","","",0);
     mensaje.de = this.userService.afAuth.auth.currentUser.uid;
     mensaje.para = item.codigo;
-    
     this.presentPrompt(mensaje);
+  }
+  checkCita(lcu){
+
   }
   salir() {
     this.authService.logout();
@@ -115,7 +114,7 @@ export class HomeMPage {
               msj.mensaje = data.mensaje;
               this.listaCitas = this.mensajeService.listMessajes(msj);
               this.mensajeService.createMessage(msj,this.listaCitas).then(()=>{
-                console.log("Guardó");
+                //console.log("Guardó");
               });
             } else {
               this.presentAlert();

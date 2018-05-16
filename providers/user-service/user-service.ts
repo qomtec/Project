@@ -83,7 +83,7 @@ export class UserServiceProvider {
       items = itemsRef.valueChanges();
       items.forEach(i => {
         let obj: any = [];
-        console.log(i);
+        //console.log(i);
         i.forEach(c => {
           
           if (c.tipo == 'p') {

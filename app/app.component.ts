@@ -45,12 +45,12 @@ export class MyApp {
           this.userService.currentUser
           .valueChanges()
           .subscribe( (user: User) => {
-            console.log(user.tipo);
+            //console.log(user.tipo);
             
             if (user.tipo == "d") {
               this.rootPage = HomeMPage;
               console.clear();
-              console.log("Hola");
+              //console.log("Hola");
               
             } else if (user.tipo == "p"){
               this.rootPage = HomePage;
@@ -63,7 +63,7 @@ export class MyApp {
         }
       } else {
         this.rootPage = LoginPage;
-        console.log("Aqui LoginPage");
+        //console.log("Aqui LoginPage");
         
       }
     });
