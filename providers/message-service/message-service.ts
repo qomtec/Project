@@ -8,7 +8,7 @@ import { Mensaje } from '../../models/mensaje.model';
 
 @Injectable()
 export class MessageServiceProvider {
-
+  public listaCitasUsuario: any;
   constructor(public db: AngularFireDatabase) { }
   public createMessage(mensaje: Mensaje, lista: AngularFireList<Mensaje>): Promise<any> {
 
@@ -20,7 +20,7 @@ export class MessageServiceProvider {
     return this.db.list('/citas/' + mensaje.fecha + '/' + mensaje.medico + '/' + mensaje.paciente,
       ref => ref.limitToLast(10).orderByChild('timestamp'));
   }
-  private extraer(keys: any = [],codigo: string, fecha: string): Promise<Mensaje> {
+  /*private extraer(keys: any = [], codigo: string, fecha: string): Promise<Mensaje> {
     return new Promise((resolve, reject) => {
       let obj: any = [];
       keys.forEach(i => {
@@ -28,17 +28,16 @@ export class MessageServiceProvider {
         let items: Observable<Mensaje[]>;
         let ref = firebase.database().ref('/citas');
         let iref = ref.child(i.key).orderByChild('fecha').equalTo(fecha);
-        console.log(iref.toString());
-        
-        itemsRef = this.db.list('/citas/'+ i.key + '/', ref => ref.orderByChild('de').equalTo(codigo));
+
+        itemsRef = this.db.list('/citas/' + i.key + '/', ref => ref.orderByChild('de').equalTo(codigo));
         items = itemsRef.valueChanges();
         items.forEach(i => {
           console.log(fecha);
-          i.forEach( c => {
-            if (c.estado == 0){
+          i.forEach(c => {
+            if (c.estado == 0) {
               obj.push({
-                de: c.de,
-                para: c.para,
+                de: c.medico,
+                para: c.paciente,
                 mensaje: c.mensaje,
                 fecha: c.fecha,
                 hora: c.hora,
@@ -49,30 +48,36 @@ export class MessageServiceProvider {
           });
           resolve(obj);
         })
-        .catch((err: any) => {
-          reject(err)
-        });
+          .catch((err: any) => {
+            reject(err)
+          });
       });
     });
-  }
-  public listCitas(codigo: string,fecha: string): Promise<Mensaje> {
+  }*/
+  public listCitas(codigo: string, fecha: string): Promise<Mensaje> {
     return new Promise((resolve, reject) => {
-      let query = firebase.database().ref('/citas').orderByKey();
-      query.once("value")
-        .then(data => {
-          console.log(codigo);
-          let llaves = [];
-          data.forEach(d => {
-            llaves.push({
-              key: d.key
-            })
-          });
-          let obj: any = [];
-          fecha = "2018-05-16";
-          obj = this.extraer(llaves,codigo,fecha);
-          resolve(obj);
-        }).catch();
-    })
+      let obj: any;
+      let itemsRef: AngularFireList<Mensaje>;
+      let items: Observable<Mensaje[]>;
+      let path: string = '/citas/' + codigo + '/' + fecha + '/';
+      itemsRef = this.db.list(path, ref=> ref.orderByChild('estado').equalTo(0));
+      itemsRef.valueChanges().subscribe(data => {
+        obj = data;
+        this.listaCitasUsuario = data;
+        resolve(obj);
+      });
+      /*items = itemsRef.valueChanges().subscribe();
+      items.forEach(data => {
+        obj = data;
+        console.log(obj);
+        resolve(obj);
+      }).then(data => {
+        
+        
+      }).catch((err) =>{
+        reject(err)
+      });*/
+    });
     /*
     let query = firebase.database().ref('/citas').orderByKey();
     query.once("value")

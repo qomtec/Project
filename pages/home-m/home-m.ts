@@ -24,7 +24,7 @@ export class HomeMPage {
   codigo_clinica: string = "";
   listaUsuario: any;
   listaCitas: AngularFireList<Mensaje>;
-  listaCitasUsuario: any;
+  //listaCitasUsuario: any;
   myDate: String = new Date().toISOString();
   constructor(
     public navCtrl: NavController,
@@ -48,10 +48,7 @@ export class HomeMPage {
             this.userService.getUsers(this.codigo_clinica).then(user => {
               this.listaUsuario = user;
             });
-            this.mensajeService.listCitas(this.authService.afAuth.auth.currentUser.uid,
-              this.myDate.split('T')[0]).then(data =>{
-              this.listaCitasUsuario = data;
-            });
+            
           }).catch((error) => {
             //console.log(error);
           });
@@ -61,14 +58,21 @@ export class HomeMPage {
   filterItems(event: any): void{
     
   }
+  cont: number =0;
   dateChange(myDate) {
     //console.log(this.myDate.toString());
+        
+    this.mensajeService.listCitas(this.authService.afAuth.auth.currentUser.uid,
+      this.myDate.split('T')[0]).then(data =>{
+      this.mensajeService.listaCitasUsuario;
+    });
   }
   onUserOpen(item){
     //console.log(item)
-    let mensaje = new Mensaje("","","","","","",0);
+    let mensaje = new Mensaje("","","","","","","",0);
     mensaje.medico = this.userService.afAuth.auth.currentUser.uid;
     mensaje.paciente = item.codigo;
+    mensaje.nombre_paciente = item.name;
     this.presentPrompt(mensaje);
   }
   checkCita(lcu){
@@ -116,7 +120,8 @@ export class HomeMPage {
               msj.mensaje = data.mensaje;
               this.listaCitas = this.mensajeService.listMessajes(msj);
               this.mensajeService.createMessage(msj,this.listaCitas).then(()=>{
-                //console.log("Guardó");
+              
+                
               });
             } else {
               this.presentAlert();

@@ -24,14 +24,14 @@
 <ion-content padding>
   <div [ngSwitch]="view">
     <ion-list *ngSwitchCase="'citas'" no-lines>
-      <p>Citas programadas</p>
       <ion-item>
         <ion-label floating>Fecha</ion-label>
         <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="myDate" (ionChange)="dateChange(myDate)"></ion-datetime>
       </ion-item>
-      <ion-item-sliding *ngFor="let lcu of listaCitasUsuario">
+      <ion-item-sliding *ngFor="let lcu of mensajeService.listaCitasUsuario">
         <ion-item>
-          <ion-label>{{ lcu.mensaje }}</ion-label>
+          <h2>{{ lcu.nombre_paciente }} </h2>
+          <h3>{{ lcu.mensaje }}</h3>
         </ion-item>
         <ion-item-options>
           <button ion-button color="danger" (click)="checkCita(lcu)">Eliminar</button>
