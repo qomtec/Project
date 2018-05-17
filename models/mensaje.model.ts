@@ -2,12 +2,12 @@ import { Md5 } from "ts-md5";
 export class Mensaje {
     public $key: string;
     constructor( 
-        public para: string,
+        public paciente: string,
         public mensaje: string,
         public fecha: string,
         public hora: string,
         public timestamp: Object,
-        public de: string,
+        public medico: string,
         public estado: number
     ){}
     static GenerateKey(email: string): string{

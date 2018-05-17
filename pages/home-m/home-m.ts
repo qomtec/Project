@@ -35,6 +35,8 @@ export class HomeMPage {
     public mensajeService: MessageServiceProvider) { }
 
   ionViewDidLoad() {
+
+    
     this.userService.mapObjectKey<User>(this.userService.currentUser)
       .first()
       .subscribe((user: User) => {
@@ -46,9 +48,9 @@ export class HomeMPage {
             this.userService.getUsers(this.codigo_clinica).then(user => {
               this.listaUsuario = user;
             });
-            this.mensajeService.listCitas(this.authService.afAuth.auth.currentUser.uid).then(data =>{
+            this.mensajeService.listCitas(this.authService.afAuth.auth.currentUser.uid,
+              this.myDate.split('T')[0]).then(data =>{
               this.listaCitasUsuario = data;
-              console.log(this.listaCitasUsuario);
             });
           }).catch((error) => {
             //console.log(error);
@@ -65,8 +67,8 @@ export class HomeMPage {
   onUserOpen(item){
     //console.log(item)
     let mensaje = new Mensaje("","","","","","",0);
-    mensaje.de = this.userService.afAuth.auth.currentUser.uid;
-    mensaje.para = item.codigo;
+    mensaje.medico = this.userService.afAuth.auth.currentUser.uid;
+    mensaje.paciente = item.codigo;
     this.presentPrompt(mensaje);
   }
   checkCita(lcu){

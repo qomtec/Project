@@ -14,22 +14,26 @@ export class MessageServiceProvider {
 
     mensaje.timestamp = firebase.database.ServerValue.TIMESTAMP;
     //console.log(mensaje);
-    return Promise.resolve(lista.push(mensaje));
+    return Promise.resolve(this.db.object('/citas/' + mensaje.medico + '/' + mensaje.fecha + '/' + mensaje.paciente).set(mensaje));
   }
   public listMessajes(mensaje: Mensaje): AngularFireList<Mensaje> {
-    return this.db.list('/citas/' + mensaje.para + "-" + mensaje.de,
+    return this.db.list('/citas/' + mensaje.fecha + '/' + mensaje.medico + '/' + mensaje.paciente,
       ref => ref.limitToLast(10).orderByChild('timestamp'));
   }
-  private extraer(keys: any = []): Promise<Mensaje> {
+  private extraer(keys: any = [],codigo: string, fecha: string): Promise<Mensaje> {
     return new Promise((resolve, reject) => {
       let obj: any = [];
       keys.forEach(i => {
         let itemsRef: AngularFireList<Mensaje>;
         let items: Observable<Mensaje[]>;
-        itemsRef = this.db.list('/citas/'+ i.key);
+        let ref = firebase.database().ref('/citas');
+        let iref = ref.child(i.key).orderByChild('fecha').equalTo(fecha);
+        console.log(iref.toString());
+        
+        itemsRef = this.db.list('/citas/'+ i.key + '/', ref => ref.orderByChild('de').equalTo(codigo));
         items = itemsRef.valueChanges();
         items.forEach(i => {
-          
+          console.log(fecha);
           i.forEach( c => {
             if (c.estado == 0){
               obj.push({
@@ -51,11 +55,12 @@ export class MessageServiceProvider {
       });
     });
   }
-  public listCitas(codigo: string): Promise<Mensaje> {
+  public listCitas(codigo: string,fecha: string): Promise<Mensaje> {
     return new Promise((resolve, reject) => {
       let query = firebase.database().ref('/citas').orderByKey();
       query.once("value")
         .then(data => {
+          console.log(codigo);
           let llaves = [];
           data.forEach(d => {
             llaves.push({
@@ -63,7 +68,8 @@ export class MessageServiceProvider {
             })
           });
           let obj: any = [];
-          obj = this.extraer(llaves);
+          fecha = "2018-05-16";
+          obj = this.extraer(llaves,codigo,fecha);
           resolve(obj);
         }).catch();
     })
