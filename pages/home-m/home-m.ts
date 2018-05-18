@@ -36,7 +36,7 @@ export class HomeMPage {
 
   ionViewDidLoad() {
 
-    
+
     this.userService.mapObjectKey<User>(this.userService.currentUser)
       .first()
       .subscribe((user: User) => {
@@ -48,41 +48,60 @@ export class HomeMPage {
             this.userService.getUsers(this.codigo_clinica).then(user => {
               this.listaUsuario = user;
             });
-            
+
           }).catch((error) => {
             //console.log(error);
           });
       });
-    
+
   }
-  filterItems(event: any): void{
-    
+  filterItems(event: any): void {
+
   }
-  cont: number =0;
+  cont: number = 0;
   dateChange(myDate) {
     //console.log(this.myDate.toString());
-        
+
     this.mensajeService.listCitas(this.authService.afAuth.auth.currentUser.uid,
-      this.myDate.split('T')[0]).then(data =>{
-      this.mensajeService.listaCitasUsuario;
-    });
+      this.myDate.split('T')[0]).then(data => {
+        this.mensajeService.listaCitasUsuario;
+      });
   }
-  onUserOpen(item){
+  onUserOpen(item) {
     //console.log(item)
-    let mensaje = new Mensaje("","","","","","","",0);
+    let mensaje = new Mensaje("", "", "", "", "", "", "", 0);
     mensaje.medico = this.userService.afAuth.auth.currentUser.uid;
     mensaje.paciente = item.codigo;
     mensaje.nombre_paciente = item.name;
     this.presentPrompt(mensaje);
   }
-  checkCita(lcu){
+  checkCita(lcu) {
 
+    let alert = this.alertCtrl.create({
+      title: 'Checkear cita',
+      subTitle: 'Deseas dar por cumplida la cita',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Aceptar',
+          role: 'ok',
+          handler: data => {
+            this.mensajeService.checarCita(lcu).then(() => {
+
+            });
+          }
+        }
+      ]
+    });
+    alert.present();
   }
   salir() {
     this.authService.logout();
     this.navCtrl.setRoot(LoginPage)
   }
-  
   presentPrompt(msj: Mensaje) {
     let alert = this.alertCtrl.create({
       title: 'Nueva cita',
@@ -111,17 +130,19 @@ export class HomeMPage {
             console.log('Cancel clicked');
           }
         },
+
         {
           text: 'Guardar',
           handler: data => {
-            if ((data.fecha != null) && (data.mensaje!="") && (data.hora != null )){
+            if ((data.fecha != null) && (data.mensaje != "") && (data.hora != null)) {
               msj.fecha = data.fecha;
               msj.hora = data.hora;
               msj.mensaje = data.mensaje;
-              this.listaCitas = this.mensajeService.listMessajes(msj);
-              this.mensajeService.createMessage(msj,this.listaCitas).then(()=>{
-              
-                
+              //this.listaCitas = this.mensajeService.listMessages(msj);
+              this.mensajeService.createMessage(msj).then(() => {
+               this.mensajeService.createMessagePaciente(msj).then(()=>{
+
+               });
               });
             } else {
               this.presentAlert();
