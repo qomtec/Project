@@ -19,16 +19,15 @@
 <ion-content padding>
   <div [ngSwitch]="view">
     <ion-list *ngSwitchCase="'citas'" no-lines>
-      <button ion-item *ngFor="let chat of chats | async" (click)="onChatOpen(chat)">
-        <ion-avatar item-start>
-          <img [src]="chat.photo || 'assets/images/no-photo.jpg'">
-        </ion-avatar>
-        <h2>{{ chat.title }}</h2>
-        <p *ngIf="chat.lastMessage; else customMessage">{{ chat.timestamp | date:'dd/MM/y H:mm' }} - {{ chat.lastMessage }}</p>
-        <ng-template #customMessage>
-          <p>No messages</p>
-        </ng-template>
-      </button>
+      <ion-item-sliding *ngFor="let lcu of mensajeService.listaCitasUsuario">
+        <ion-item>
+          <h2> {{lcu.fecha}} </h2>
+          <h3> {{lcu.mensaje}}</h3>
+        </ion-item>
+        <ion-item-options>
+          <button ion-button color="secondary" (click)="checkCita(lcu)">Detalles</button>
+        </ion-item-options>
+      </ion-item-sliding>
     </ion-list>
 
     <ion-list *ngSwitchCase="'usuario'" no-lines>

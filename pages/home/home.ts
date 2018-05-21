@@ -9,6 +9,7 @@ import { ClinicaServiceProvider } from '../../providers/clinica-service/clinica-
 
 import { User } from '../../models/user.model';
 import { Clinica } from "../../models/clinica.model";
+import { MessageServiceProvider } from '../../providers/message-service/message-service';
 
 @Component({
   selector: 'page-home',
@@ -19,24 +20,32 @@ export class HomePage {
   nombre_usuario: string = "";
   nombre_clinica: string = "";
   codigo_clinica: string = "";
+  codigo_usuario: string = "";
+  listado: any;
   constructor(
     public navCtrl: NavController,
     public authService: AuthServiceProvider,
     public userService: UserServiceProvider,
-    public clinicaService: ClinicaServiceProvider) { }
+    public clinicaService: ClinicaServiceProvider,
+    public mensajeService: MessageServiceProvider) { }
     ionViewCanEnter(): Promise<boolean> {
       return this.authService.authenticated;
     }
   ionViewDidLoad() {
+    console.clear();
     this.userService.mapObjectKey<User>(this.userService.currentUser)
       .first()
       .subscribe((user: User) => {
         this.nombre_usuario = user.name;
+        this.codigo_usuario = user.codigo;
         this.codigo_clinica = user.codigo_clinica;
         this.clinicaService.getClinica(user.codigo_clinica)
         .then((cl: Clinica) => {
+          
           this.nombre_clinica = cl.nombre;
-
+          this.mensajeService.listCitasPaciente(this.codigo_usuario).then(data => {
+            this.listado = data;
+          });
         }).catch ((error)=> {
           console.log(error);
         });

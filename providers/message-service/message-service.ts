@@ -9,15 +9,24 @@ import { Mensaje } from '../../models/mensaje.model';
 export class MessageServiceProvider {
   public listaCitasUsuario: any;
   constructor(public db: AngularFireDatabase) { }
+  
   public createMessage(mensaje: Mensaje): Promise<any> {
     mensaje.timestamp = firebase.database.ServerValue.TIMESTAMP;
-    //console.log(mensaje);
     return Promise.resolve(this.db.object('/citas/' + mensaje.medico + '/' + mensaje.fecha + '/' + mensaje.paciente).set(mensaje));
   }
+  public createMessagePaciente(mensaje: Mensaje): Promise<any>{
+    mensaje.timestamp = firebase.database.ServerValue.TIMESTAMP;
+    return Promise.resolve(this.db.object('/citasp/' + mensaje.paciente + '/' + mensaje.fecha).set(mensaje));
+  }
+  
   public listMessages(mensaje: Mensaje): AngularFireList<Mensaje> {
-    return this.db.list('/citas/' + mensaje.fecha + '/' + mensaje.medico + '/' + mensaje.paciente,
+    return this.db.list('/citas/' + mensaje.medico + '/' + mensaje.fecha + '/' + mensaje.paciente,
       ref => ref.orderByChild('timestamp'));
   }
+  public listMessagesPaciente(mensaje: Mensaje): AngularFireList<Mensaje> {
+    return this.db.list('/citasp/' + mensaje.paciente + '/' + mensaje.fecha,ref => ref.orderByKey());
+  }
+
   public listCitas(codigo: string, fecha: string): Promise<Mensaje> {
     return new Promise((resolve, reject) => {
       let obj: any;
@@ -31,18 +40,39 @@ export class MessageServiceProvider {
       });
     });
   }
-  public createMessagePaciente(mensaje: Mensaje): Promise<any>{
-    mensaje.timestamp = firebase.database.ServerValue.TIMESTAMP;
-    return Promise.resolve(this.db.object('/citasp/' + mensaje.paciente + '/' + mensaje.fecha).set(mensaje));
-  }
-  public listMessagesPaciente(mensaje: Mensaje): AngularFireList<Mensaje> {
-    return this.db.list('/citasp/' + mensaje.paciente + '/' + mensaje.fecha,ref => ref.orderByKey());
+  public listCitasPaciente(codigo: string): Promise<any>{
+    return new Promise((resolve, reject)=>{
+      
+      let obj = [new Mensaje("", "", "", "", "", "", "", 0)];
+      let itemsRef: AngularFireList<Mensaje>;
+      let path: string ='/citasp/' + codigo + '/';
+      obj.pop();
+      itemsRef = this.db.list(path, ref=> ref.orderByKey());
+      itemsRef.valueChanges().subscribe(data=>{
+        let cont: number= 0;
+        //this.listaCitasUsuario = null;
+        try{
+          obj = [new Mensaje("", "", "", "", "", "", "", 0)];
+          obj.pop();
+        } catch(err ){
+
+        }
+        data.forEach(valor =>{
+          cont++;
+          console.log(cont + "----------------------------------");
+          console.log(valor);
+          obj.push(valor);
+        });
+        this.listaCitasUsuario = obj;
+        resolve("")
+      });
+      
+    });
   }
   public checarCita(item: any): Promise<any>{
     item.estado = 1;
     this.db.object('/citasp/' + item.paciente + '/' + item.fecha).set(item);
     return Promise.resolve(this.db.object('/citas/' + item.medico + '/' + item.fecha + '/' + item.paciente).set(item));
-
   }
 
 }
