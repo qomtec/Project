@@ -5,10 +5,13 @@ import * as firebase from 'firebase/app';
 
 import { Mensaje } from '../../models/mensaje.model';
 
+import { LocalNotifications } from '@ionic-native/local-notifications';
+
 @Injectable()
 export class MessageServiceProvider {
   public listaCitasUsuario: any;
-  constructor(public db: AngularFireDatabase) { }
+  constructor(public db: AngularFireDatabase,
+              public localNotifications: LocalNotifications) { }
   
   public createMessage(mensaje: Mensaje): Promise<any> {
     mensaje.timestamp = firebase.database.ServerValue.TIMESTAMP;
@@ -49,7 +52,7 @@ export class MessageServiceProvider {
       obj.pop();
       itemsRef = this.db.list(path, ref=> ref.orderByKey());
       itemsRef.valueChanges().subscribe(data=>{
-        let cont: number= 0;
+        
         //this.listaCitasUsuario = null;
         try{
           obj = [new Mensaje("", "", "", "", "", "", "", 0)];
@@ -58,10 +61,13 @@ export class MessageServiceProvider {
 
         }
         data.forEach(valor =>{
-          cont++;
-          console.log(cont + "----------------------------------");
-          console.log(valor);
+        
           obj.push(valor);
+        });
+        this.localNotifications.schedule({
+          id: 1,
+          text: 'Single ILocalNotification',
+          data: 'chema'
         });
         this.listaCitasUsuario = obj;
         resolve("")

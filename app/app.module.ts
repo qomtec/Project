@@ -19,6 +19,8 @@ import { UserServiceProvider } from '../providers/user-service/user-service';
 import { ClinicaServiceProvider } from '../providers/clinica-service/clinica-service';
 import { MessageServiceProvider } from '../providers/message-service/message-service';
 
+import { LocalNotifications } from '@ionic-native/local-notifications';
+
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyAqgZ2ahuD-_A8Fg9cQM2TddaJjB6Cr3yQ",
   authDomain: "qomtec-college.firebaseapp.com",
@@ -59,7 +61,8 @@ const firebaseAppConfig: FirebaseAppConfig = {
     AuthServiceProvider,
     UserServiceProvider,
     ClinicaServiceProvider,
-    MessageServiceProvider
+    MessageServiceProvider,
+    LocalNotifications
   ]
 })
 export class AppModule { }
