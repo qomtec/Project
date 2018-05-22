@@ -42,20 +42,18 @@ export class HomePage {
         this.codigo_clinica = user.codigo_clinica;
         this.clinicaService.getClinica(user.codigo_clinica)
           .then((cl: Clinica) => {
-
             this.nombre_clinica = cl.nombre;
             this.mensajeService.listCitasPaciente(this.codigo_usuario).then(data => {
               this.listado = data;
+              
             });
           }).catch((error) => {
             console.log(error);
           });
       });
-
   }
   logout() {
     this.authService.logout();
     this.navCtrl.setRoot(LoginPage);
   }
-
 }

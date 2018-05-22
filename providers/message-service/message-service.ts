@@ -58,16 +58,16 @@ export class MessageServiceProvider {
           obj = [new Mensaje("", "", "", "", "", "", "", 0)];
           obj.pop();
         } catch(err ){
-
         }
         data.forEach(valor =>{
-        
           obj.push(valor);
-        });
-        this.localNotifications.schedule({
-          id: 1,
-          text: 'Single ILocalNotification',
-          data: 'chema'
+          if (valor.estado == 0){
+            this.localNotifications.schedule({
+              id: 1,
+              title: 'Dental date',
+              text: valor.mensaje,
+            });
+          }
         });
         this.listaCitasUsuario = obj;
         resolve("")

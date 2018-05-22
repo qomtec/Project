@@ -35,8 +35,7 @@ export class HomeMPage {
     public mensajeService: MessageServiceProvider) { }
 
   ionViewDidLoad() {
-
-
+    console.clear();    
     this.userService.mapObjectKey<User>(this.userService.currentUser)
       .first()
       .subscribe((user: User) => {
@@ -48,7 +47,6 @@ export class HomeMPage {
             this.userService.getUsers(this.codigo_clinica).then(user => {
               this.listaUsuario = user;
             });
-
           }).catch((error) => {
             //console.log(error);
           });
@@ -61,10 +59,10 @@ export class HomeMPage {
   cont: number = 0;
   dateChange(myDate) {
     //console.log(this.myDate.toString());
-
     this.mensajeService.listCitas(this.authService.afAuth.auth.currentUser.uid,
       this.myDate.split('T')[0]).then(data => {
-        this.mensajeService.listaCitasUsuario;
+        this.mensajeService.listaCitasUsuario; 
+        console.log(this.mensajeService.listaCitasUsuario);
       });
   }
   onUserOpen(item) {
@@ -76,7 +74,6 @@ export class HomeMPage {
     this.presentPrompt(mensaje);
   }
   checkCita(lcu) {
-
     let alert = this.alertCtrl.create({
       title: 'Checkear cita',
       subTitle: 'Deseas dar por cumplida la cita',
@@ -90,7 +87,6 @@ export class HomeMPage {
           role: 'ok',
           handler: data => {
             this.mensajeService.checarCita(lcu).then(() => {
-
             });
           }
         }
